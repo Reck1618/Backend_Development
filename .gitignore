@@ -1,5 +1,1 @@
-Django/env/bin
-Django/env/bin64
-Django/env/include
-Django/env/pyvenv.cfg
-Django/env/lib
+Django/env/
