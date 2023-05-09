@@ -11,3 +11,14 @@ def demo(request):
     method = request.method
     content = f"<html><body><h1>Welcome to my Demo Page</h1><p>Path: {path}</p><p>Method: {method}</p></body></html>"
     return HttpResponse(content)
+
+def show_form(request):
+    return render(request, 'form.html')
+
+def get_form(request):
+    if request.method == "POST":
+        UserID = request.POST['id']
+        name = request.POST['name']
+    return HttpResponse(f"Name: {name} <br> ID: {UserID}")
+
+        

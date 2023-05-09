@@ -1,0 +1,6 @@
+<form action="getform" method="POST">
+    {% csrf_token %}
+    <p>Name: <input type="name" name="name" required></p>
+    <p>UserID: <input type="text" name="id" required></p>
+    <input type="submit">
+</form>
