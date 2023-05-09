@@ -21,4 +21,13 @@ def get_form(request):
         name = request.POST['name']
     return HttpResponse(f"Name: {name} <br> ID: {UserID}")
 
+def dish(request, name):
+    dishes = {
+        'tofu': 'You a soy boy',
+        'cheese': 'french? lol',
+        'paneer': 'Finally! something healthy',
+    }
+
+    content = f"<html><body><h1>{name}</h1><h2>{dishes[name]}</h2></body></html>"
+    return HttpResponse(content)
         
