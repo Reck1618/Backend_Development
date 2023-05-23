@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from .forms import ApplicationForm
 
 # Create your views here.
 def home(request):
@@ -31,3 +32,10 @@ def dish(request, name):
     content = f"<html><body><h1>{name}</h1><h2>{dishes[name]}</h2></body></html>"
     return HttpResponse(content)
         
+def index(request):
+    form = ApplicationForm()
+
+    return render(request, 'form2.html', {'form': form})
+
+def get_index(request):
+    return HttpResponse("Form Submitted")
