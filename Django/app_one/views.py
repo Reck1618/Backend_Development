@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .forms import ApplicationForm
+from .forms import ApplicationForm, LogForm
 
 # Create your views here.
 def home(request):
@@ -34,8 +34,24 @@ def dish(request, name):
         
 def index(request):
     form = ApplicationForm()
+    if request.method == 'POST':
+        form = ApplicationForm(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            address = form.cleaned_data['address']
+            field = form.cleaned_data['field']
+            return HttpResponse(f"Form Submitted! <br> Name: {name} <br> Address: {address} <br> Field: {field}")
     context = {'form': form}
     return render(request, 'form2.html', context)
 
-def get_index(request):
-    return HttpResponse("Form Submitted")
+
+def logger_view(request):
+    form = LogForm()
+    if request.method == 'POST':
+        form = LogForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponse("Form Submitted!")
+    context = {'form': form}
+    return render(request, 'logger.html', context)
+

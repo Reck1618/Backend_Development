@@ -9,3 +9,8 @@ class Menu(models.Model):
     def __str__(self):
         return self.name + ':' + self.cuisine + ':' + str(self.price)
     
+
+class Logger(models.Model):
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    time_logged = models.DateTimeField(auto_now_add=True)

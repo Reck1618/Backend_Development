@@ -9,5 +9,5 @@ urlpatterns = [
     path('showform/getform', views.get_form, name = 'get_form'),
     path('dish/<str:name>', views.dish, name = 'dish'),
     path('index/', views.index, name = 'index'),
-    path('index/getindex', views.get_index, name = 'get_index'),
+    path('logger/', views.logger_view, name = 'logger_view'),
 ]
