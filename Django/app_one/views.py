@@ -34,8 +34,8 @@ def dish(request, name):
         
 def index(request):
     form = ApplicationForm()
-
-    return render(request, 'form2.html', {'form': form})
+    context = {'form': form}
+    return render(request, 'form2.html', context)
 
 def get_index(request):
     return HttpResponse("Form Submitted")
