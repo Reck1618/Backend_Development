@@ -1,9 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
+from .models import PlayerInfo
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
+from .serializers import PlayerInfoSerializer
 
 # Function based views
 @api_view(['GET','POST'])
@@ -31,3 +33,17 @@ class Book(APIView):
     
     def post(self, request, pk):
         return Response({"message":request.data.get("title")}, status.HTTP_200_OK)
+
+
+# Using Serializers
+@api_view()
+def players(request):
+    players = PlayerInfo.objects.select_related('team').all()
+    serialized_info = PlayerInfoSerializer(players, many=True)
+    return Response(serialized_info.data)
+
+@api_view()
+def single_player(request, id):
+    player = get_object_or_404(PlayerInfo, pk=id)
+    serialized_info = PlayerInfoSerializer(player)
+    return Response(serialized_info.data)
