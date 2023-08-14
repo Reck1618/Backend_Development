@@ -14,12 +14,12 @@ class TeamSerializer(serializers.ModelSerializer):
 class PlayerInfoSerializer(serializers.ModelSerializer):
     player_age  = serializers.IntegerField(source='age')
     player_name = serializers.CharField(source='name')
-    ramaning_years = serializers.SerializerMethodField(method_name='remaning_years')
+    yearly_salary = serializers.SerializerMethodField(method_name='salary')
     team = TeamSerializer()
 
     class Meta:
         model = PlayerInfo
-        fields = ('id', 'player_name', 'player_age', 'ramaning_years', 'team')
+        fields = ('id', 'player_name', 'player_age', 'yearly_salary', 'team')
 
-    def remaning_years(self, product: PlayerInfo):
-        return 60 - product.age
+    def salary(self, player: PlayerInfo):
+        return (100 - player.age) * 1000
