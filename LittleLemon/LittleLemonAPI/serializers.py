@@ -20,6 +20,7 @@ class PlayerInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = PlayerInfo
         fields = ('id', 'player_name', 'player_age', 'yearly_salary', 'team')
+        # depth = 1
 
     def salary(self, player: PlayerInfo):
         return (100 - player.age) * 1000

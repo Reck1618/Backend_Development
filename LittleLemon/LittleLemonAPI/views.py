@@ -1,11 +1,11 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
-from .models import PlayerInfo
+from .models import PlayerInfo, Team
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
-from .serializers import PlayerInfoSerializer
+from .serializers import PlayerInfoSerializer, TeamSerializer
 
 # Function based views
 @api_view(['GET','POST'])
@@ -47,3 +47,10 @@ def single_player(request, id):
     player = get_object_or_404(PlayerInfo, pk=id)
     serialized_info = PlayerInfoSerializer(player)
     return Response(serialized_info.data)
+
+
+@api_view()
+def single_team(request, id):
+    team = get_object_or_404(Team, pk=id)
+    serialized_team = TeamSerializer(team)
+    return Response(serialized_team.data)
