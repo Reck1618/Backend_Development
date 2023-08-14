@@ -15,11 +15,12 @@ class PlayerInfoSerializer(serializers.ModelSerializer):
     player_age  = serializers.IntegerField(source='age')
     player_name = serializers.CharField(source='name')
     yearly_salary = serializers.SerializerMethodField(method_name='salary')
-    team = TeamSerializer()
+    team = TeamSerializer(read_only=True)
+    team_id = serializers.IntegerField(write_only=True)
 
     class Meta:
         model = PlayerInfo
-        fields = ('id', 'player_name', 'player_age', 'yearly_salary', 'team')
+        fields = ('id', 'player_name', 'player_age', 'yearly_salary', 'team_id', 'team')
         # depth = 1
 
     def salary(self, player: PlayerInfo):

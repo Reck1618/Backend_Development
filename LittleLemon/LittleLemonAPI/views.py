@@ -36,11 +36,19 @@ class Book(APIView):
 
 
 # Using Serializers
-@api_view()
+@api_view(['GET','POST'])
 def players(request):
-    players = PlayerInfo.objects.select_related('team').all()
-    serialized_info = PlayerInfoSerializer(players, many=True)
-    return Response(serialized_info.data)
+
+    if request.method == 'GET':
+        players = PlayerInfo.objects.select_related('team').all()
+        serialized_info = PlayerInfoSerializer(players, many=True)
+        return Response(serialized_info.data)
+
+    if request.method == 'POST':
+        serialized_item = PlayerInfoSerializer(data=request.data)
+        serialized_item.is_valid(raise_exception=True)
+        serialized_item.save()
+        return Response(serialized_item.data, status.HTTP_201_CREATED)
 
 @api_view()
 def single_player(request, id):
