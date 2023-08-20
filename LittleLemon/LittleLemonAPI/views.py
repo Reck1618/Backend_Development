@@ -43,7 +43,8 @@ def players(request):
         players = PlayerInfo.objects.select_related('team').all()
         team_city = request.query_params.get('team')
         player_age = request.query_params.get('age')
-        search = request.query_params.get('serch')
+        search = request.query_params.get('search')
+        ordering = request.query_params.get('ordering')
 
         if team_city:
             players = players.filter(team__city=team_city) # try : ?team=delhi
@@ -53,6 +54,10 @@ def players(request):
 
         if search:
             players = players.filter(name__istartswith=search) # try : ?search=b
+
+        if ordering:
+            ordering = ordering.split(',')
+            players = players.order_by(*ordering) # try : ?ordering=age
 
         serialized_info = PlayerInfoSerializer(players, many=True)
         return Response(serialized_info.data)
