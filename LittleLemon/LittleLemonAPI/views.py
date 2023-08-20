@@ -57,7 +57,7 @@ def players(request):
 
         if ordering:
             ordering = ordering.split(',')
-            players = players.order_by(*ordering) # try : ?ordering=age
+            players = players.order_by(*ordering) # try : ?ordering=-age
 
         serialized_info = PlayerInfoSerializer(players, many=True)
         return Response(serialized_info.data)
