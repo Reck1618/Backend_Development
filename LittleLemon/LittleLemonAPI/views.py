@@ -13,7 +13,7 @@ def books(request):
     if request.method == 'GET':
         return Response('list of the books', status=status.HTTP_200_OK)
     else:
-        return Response('take the shit', status=status.HTTP_200_OK) 
+        return Response('take the shit', status=status.HTTP_200_OK)
 
 # Class based views
 class BookList(APIView):
@@ -41,6 +41,19 @@ def players(request):
 
     if request.method == 'GET':
         players = PlayerInfo.objects.select_related('team').all()
+        team_city = request.query_params.get('team')
+        player_age = request.query_params.get('age')
+        search = request.query_params.get('serch')
+
+        if team_city:
+            players = players.filter(team__city=team_city) # try : ?team=delhi
+
+        if player_age:
+            players = players.filter(age__lte=player_age) # try : ?age=23
+
+        if search:
+            players = players.filter(name__istartswith=search) # try : ?search=b
+
         serialized_info = PlayerInfoSerializer(players, many=True)
         return Response(serialized_info.data)
 
