@@ -97,3 +97,11 @@ def single_team(request, id):
 @permission_classes([IsAuthenticated])
 def secret(request):
     return Response({"message":"Bruce wayne is Batman"}, status.HTTP_200_OK)
+
+@api_view()
+@permission_classes([IsAuthenticated])
+def manager_view(request):
+    if request.user.groups.filter(name='Manager').exists():
+        return Response({"message":"Only Managers should see this."}, status.HTTP_200_OK)
+    else:
+        return Response({"message":"You are not authorized to see this."}, status.HTTP_401_UNAUTHORIZED)

@@ -11,4 +11,5 @@ urlpatterns = [
     path('teams/<int:id>', views.single_team, name='single-team'),
     path('secret/', views.secret, name='secret'),
     path('api-token-auth/', obtain_auth_token),
+    path('manager/', views.manager_view, name='manager'),
 ]
