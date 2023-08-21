@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import PlayerInfo, Team
 from rest_framework.validators import UniqueValidator, UniqueTogetherValidator
+import bleach
 
 # class PlayerInfoSerializer(serializers.Serializer):
 #     id = serializers.IntegerField()
@@ -25,7 +26,7 @@ class PlayerInfoSerializer(serializers.ModelSerializer):
         validators = [
             UniqueTogetherValidator(
                 queryset=PlayerInfo.objects.all(),
-                fields=['name', 'age']
+                fields=['player_name', 'player_age']
             )
         ]
         # depth = 1
@@ -36,6 +37,7 @@ class PlayerInfoSerializer(serializers.ModelSerializer):
 
     # data validation
     def validate(self, attrs):
+        attrs['name'] = bleach.clean(attrs['name'])
         if (attrs['age']<18):
             raise serializers.ValidationError('You are too young to play')
         if(attrs['age']>100):
