@@ -7,6 +7,8 @@ from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from .serializers import PlayerInfoSerializer, TeamSerializer
 from django.core.paginator import Paginator
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import permission_classes
 
 # Function based views
 @api_view(['GET','POST'])
@@ -89,3 +91,9 @@ def single_team(request, id):
     team = get_object_or_404(Team, pk=id)
     serialized_team = TeamSerializer(team)
     return Response(serialized_team.data)
+
+
+@api_view()
+@permission_classes([IsAuthenticated])
+def secret(request):
+    return Response({"message":"Bruce wayne is Batman"}, status.HTTP_200_OK)
