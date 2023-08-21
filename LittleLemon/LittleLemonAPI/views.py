@@ -6,6 +6,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from .serializers import PlayerInfoSerializer, TeamSerializer
+from django.core.paginator import Paginator
 
 # Function based views
 @api_view(['GET','POST'])
@@ -45,6 +46,8 @@ def players(request):
         player_age = request.query_params.get('age')
         search = request.query_params.get('search')
         ordering = request.query_params.get('ordering')
+        perpage = request.query_params.get('perpage', default=2)
+        page = request.query_params.get('page', default=1)
 
         if team_city:
             players = players.filter(team__city=team_city) # try : ?team=delhi
@@ -58,6 +61,12 @@ def players(request):
         if ordering:
             ordering = ordering.split(',')
             players = players.order_by(*ordering) # try : ?ordering=-age
+
+        paginator = Paginator(players, per_page=perpage)
+        try:
+            players = paginator.page(page)
+        except:
+            players = []
 
         serialized_info = PlayerInfoSerializer(players, many=True)
         return Response(serialized_info.data)
