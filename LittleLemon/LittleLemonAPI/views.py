@@ -3,12 +3,14 @@ from django.http import HttpResponse
 from .models import PlayerInfo, Team
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, throttle_classes, permission_classes
 from rest_framework.views import APIView
 from .serializers import PlayerInfoSerializer, TeamSerializer
 from django.core.paginator import Paginator
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import permission_classes
+from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
+from .throttles import TenCallsPerMinute
+from rest_framework import viewsets
 
 # Function based views
 @api_view(['GET','POST'])
@@ -98,6 +100,7 @@ def single_team(request, id):
 def secret(request):
     return Response({"message":"Bruce wayne is Batman"}, status.HTTP_200_OK)
 
+
 @api_view()
 @permission_classes([IsAuthenticated])
 def manager_view(request):
@@ -105,3 +108,36 @@ def manager_view(request):
         return Response({"message":"Only Managers should see this."}, status.HTTP_200_OK)
     else:
         return Response({"message":"You are not authorized to see this."}, status.HTTP_401_UNAUTHORIZED)
+
+
+@api_view()
+@throttle_classes([AnonRateThrottle])
+def throttle_check(request):
+    return Response({"message":"Successful"}, status.HTTP_200_OK)
+
+@api_view()
+@permission_classes([IsAuthenticated])
+@throttle_classes([UserRateThrottle])
+def throttle_check_auth(request):
+    return Response({"message":"Successful"}, status.HTTP_200_OK)
+
+
+@api_view()
+@throttle_classes([TenCallsPerMinute])
+def throttle_check_custom(request):
+    return Response({"message":"Successful"}, status.HTTP_200_OK)
+
+
+class PlayersViewSet(viewsets.ModelViewSet):
+    # throttle_classes = [AnonRateThrottle, UserRateThrottle]
+    queryset = PlayerInfo.objects.all()
+    serializer_class = PlayerInfoSerializer
+
+    # custom throttle for different actions
+    def get_throttles(self):
+        if self.action == 'create':
+            return [AnonRateThrottle]
+        else:
+            throttle_classes = [TenCallsPerMinute]
+            return [throttle() for throttle in throttle_classes]
+

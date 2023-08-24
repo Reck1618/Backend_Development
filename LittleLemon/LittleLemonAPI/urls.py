@@ -12,4 +12,9 @@ urlpatterns = [
     path('secret/', views.secret, name='secret'),
     path('api-token-auth/', obtain_auth_token),
     path('manager/', views.manager_view, name='manager'),
+    path('throttle-check/', views.throttle_check, name='throttle-check'),
+    path('throttle-check-auth/', views.throttle_check_auth, name='throttle-check-auth'),
+    path('throttle-check-custom/', views.throttle_check_custom, name='throttle-check-custom'),
+    path('players-class/', views.PlayersViewSet.as_view({'get': 'list'})),
+    path('players-class/<int:pk>', views.PlayersViewSet.as_view({'get': 'retrieve'})),
 ]

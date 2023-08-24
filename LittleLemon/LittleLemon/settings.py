@@ -40,7 +40,10 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'debug_toolbar',
+    'djoser',
 ]
+
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -134,5 +137,19 @@ INTERNAL_IPS = [
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
-    )
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '5/day',
+        'user': '5/minute',
+        'ten': '10/minute'
+    },
+    'DEFAULT_THROTTELING_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle',
+    ],
+}
+
+DJOSER = {
+    "USER_ID_FIELD": "username",
 }
