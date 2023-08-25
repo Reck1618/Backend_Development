@@ -17,4 +17,5 @@ urlpatterns = [
     path('throttle-check-custom/', views.throttle_check_custom, name='throttle-check-custom'),
     path('players-class/', views.PlayersViewSet.as_view({'get': 'list'})),
     path('players-class/<int:pk>', views.PlayersViewSet.as_view({'get': 'retrieve'})),
+    path('groups/manager/users', views.managers, name='managers'),
 ]

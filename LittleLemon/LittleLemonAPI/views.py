@@ -7,10 +7,11 @@ from rest_framework.decorators import api_view, throttle_classes, permission_cla
 from rest_framework.views import APIView
 from .serializers import PlayerInfoSerializer, TeamSerializer
 from django.core.paginator import Paginator
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 from .throttles import TenCallsPerMinute
 from rest_framework import viewsets
+from django.contrib.auth.models import User, Group
 
 # Function based views
 @api_view(['GET','POST'])
@@ -141,3 +142,19 @@ class PlayersViewSet(viewsets.ModelViewSet):
             throttle_classes = [TenCallsPerMinute]
             return [throttle() for throttle in throttle_classes]
 
+
+@api_view(['POST','DELETE'])
+@permission_classes([IsAdminUser])
+def managers(request):
+    username = request.data['username']
+    if username:
+        user = get_object_or_404(User, username=username)
+        managers = Group.objects.get(name='Manager')
+
+        if request.method == "POST":
+            managers.user_set.add(user)
+        elif request.method == "DELETE":
+            managers.user_set.remove(user)
+        return Response({"message":"Successful"}, status.HTTP_200_OK)
+
+    return Response({"message":"You are not authorized to see this."}, status.HTTP_401_UNAUTHORIZED)
