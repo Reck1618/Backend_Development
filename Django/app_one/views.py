@@ -31,7 +31,7 @@ def dish(request, name):
 
     content = f"<html><body><h1>{name}</h1><h2>{dishes[name]}</h2></body></html>"
     return HttpResponse(content)
-        
+
 def index(request):
     form = ApplicationForm()
     if request.method == 'POST':
