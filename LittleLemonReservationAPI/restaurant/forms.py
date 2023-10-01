@@ -1,8 +1,9 @@
-from django import forms
-from .models import Booking, Menu
+from django.forms import ModelForm
+from .models import Booking
 
 
-class BookingForm(forms.ModelForm):
+# Code added for loading form data on the Booking page
+class BookingForm(ModelForm):
     class Meta:
         model = Booking
-        fields = '__all__'
+        fields = "__all__"
